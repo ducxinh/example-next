@@ -1,71 +1,7 @@
-'use client'
-
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { zodResolver } from '@hookform/resolvers/zod';
 import Link from "next/link";
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import toast from 'react-hot-toast'
-
-
-interface InputFieldProps {
-  id: string;
-  label: string;
-  type: string;
-  register: any;
-  errors: Record<string, any>;
-  placeholder: string;
-}
-
-const InputField = ({ id, label, type, register, errors, placeholder }: InputFieldProps) => (
-  <div>
-    <Label htmlFor={id}>{label}</Label>
-    <input
-      type={type}
-      id={id}
-      className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-      placeholder={placeholder}
-      {...register(id)}
-    />
-    {errors[id] && (
-      <p className="mt-2 text-sm text-red-600 dark:text-red-500">
-        {errors[id].message?.toString()}
-      </p>
-    )}
-  </div>
-);
 
 export function Login() {
-  const router = useRouter();
-
-  const schema = z.object({
-    email: z.string().email(),
-    password: z.string().min(6),
-  });
-
-  const { register, handleSubmit, formState: { errors }, setError } = useForm({
-    resolver: zodResolver(schema),
-  });
-
-  const onSubmit = (data: any) => {
-    console.log('Form Data:', data);
-    const ACCOUNT = {
-      email: 'user001@example.com',
-      password: 'password',
-    }
-    if (data.email === ACCOUNT.email && data.password === ACCOUNT.password) {
-      console.log('Login success');
-      setTimeout(() => {
-        router.push('/mypage');
-      }, 1000);
-    } else {
-      setError('email', { type: 'manual', message: 'Invalid email or password' });
-      toast.error('Login failed');
-    }
-  };
-
   return (
     <section className="bg-gray-50 dark:bg-gray-900 mt-10 sm:mx-auto">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 max-w-xl">
@@ -85,23 +21,37 @@ export function Login() {
             <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
               Sign in to your account
             </h1>
-            <form className="space-y-4 md:space-y-6" onSubmit={handleSubmit(onSubmit)}>
-              <InputField
-                id="email"
-                label="Your email"
-                type="email"
-                register={register}
-                errors={errors}
-                placeholder="name@company.com"
-              />
-              <InputField
-                id="password"
-                label="Password"
-                type="password"
-                register={register}
-                errors={errors}
-                placeholder="••••••••"
-              />
+            <form className="space-y-4 md:space-y-6" action="#">
+              <div>
+                <label
+                  htmlFor="email"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Your email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  id="email"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                  placeholder="name@company.com"
+                />
+              </div>
+              <div>
+                <label
+                  htmlFor="password"
+                  className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >
+                  Password
+                </label>
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  placeholder="••••••••"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                />
+              </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
@@ -128,7 +78,7 @@ export function Login() {
                   Forgot password?
                 </a>
               </div>
-              <Button type="submit" className="w-full">Sign in</Button>
+              <Button className="w-full">Sign in</Button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                 Don’t have an account yet?{" "}
                 <Link
